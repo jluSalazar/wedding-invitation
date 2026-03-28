@@ -98,7 +98,7 @@ Una aplicación web elegante y moderna para compartir detalles de tu boda y reco
 
 1. **Clonar el repositorio**
    ```bash
-   git clone <tu-repo>
+   git clone https://github.com/jluSalazar/wedding-invitation.git
    cd wedding
    ```
 
