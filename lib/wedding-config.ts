@@ -2,8 +2,8 @@ export const weddingConfig = {
   couple: {
     name1: 'Silvana',
     name2: 'Javier',
-    fullName1: 'Silvana Apellido',
-    fullName2: 'Javier Apellido',
+    fullName1: 'Silvana Reyes',
+    fullName2: 'Javier Chamba',
     initials: 'S&J',
   },
   event: {

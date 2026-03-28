@@ -21,8 +21,8 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "Sandra & Daniel — Nuestra Boda",
-  description: "Invitación de boda — 20 de Diciembre, 2026",
+  title: "Silvana & Javier — Nuestra Boda",
+  description: "Invitación de boda — 25 de Abril, 2026",
 };
 
 export default function RootLayout({
