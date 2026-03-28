@@ -12,7 +12,8 @@ Una aplicación web elegante y moderna para compartir detalles de tu boda y reco
 - ⏱️ **Countdown Dinámico**: Contador de días, horas, minutos y segundos hasta la boda
 - 👥 **Sección de Familias**: Visualización elegante de padres y padrinos
 - 🗺️ **Ubicaciones**: Detalles de la ceremonia y recepción con enlaces a Google Maps
-- 📲 **Selector de Pases**: Interfaz intuitiva para confirmar cantidad de asistentes
+- 📲 **RSVP de un toque**: Botones directos de "Sí" / "No" y opción para cambiar respuesta
+- 🛡️ **Panel Admin**: Ruta protegida para monitoreo, filtros y exportación CSV
 
 ## 🏗️ Arquitectura
 
@@ -35,6 +36,10 @@ Una aplicación web elegante y moderna para compartir detalles de tu boda y reco
 │   ├── page.tsx                 # Página de inicio (próximamente disponible)
 │   ├── actions/
 │   │   └── rsvp.ts              # Server Action para procesar RSVP
+│   ├── admin/
+│   │   ├── page.tsx             # Página protegida del panel admin
+│   │   └── components/
+│   │       └── AdminDashboard.tsx  # Tabla, filtros y exportación CSV
 │   └── invitacion/
 │       └── [customId]/
 │           ├── page.tsx         # Página dinámica del invitado
@@ -49,6 +54,7 @@ Una aplicación web elegante y moderna para compartir detalles de tu boda y reco
 │               └── 08-AudioPill.tsx            # Reproductor de audio flotante
 ├── lib/
 │   ├── mongodb.ts               # Conexión a MongoDB con caché global
+│   ├── admin.ts                 # Consultas para panel administrativo
 │   └── wedding-config.ts        # Configuración centralizada de la boda
 ├── models/
 │   └── Guest.ts                 # Esquema Mongoose para invitados
@@ -152,11 +158,16 @@ npm run lint
    - URLs personalizadas al formato `/invitacion/[customId]?token=XYZ`
 
 2. **Protecciones RSVP**
-   - Validación de estados: solo guests "pending" pueden actualizar
+  - Validación de límites de pases permitidos
+  - Actualización segura de respuesta para cambios posteriores
    - Límite máximo: `passesConfirmed` ≤ `passesAllowed`
-   - Prevención de dobles confirmaciones
 
-3. **Server Actions**
+3. **Panel Administrativo**
+  - Acceso protegido por `ADMIN_TOKEN`
+  - Consulta de invitados solo del lado del servidor
+  - Filtros, búsqueda y exportación en CSV desde el panel
+
+4. **Server Actions**
    - Validación en servidor de todos los parámetros
    - Manejo de errores robusto y seguro
 
@@ -215,23 +226,31 @@ export const weddingConfig = {
 
 ### 2. Formulario RSVP (Client Component)
 
-- Selector de decisión: "Sí" / "No"
-- Spinner de pases (incrementar/decrementar cantidad)
-- Validación de límites
-- Estado pending/success/error
+- Botones de decisión: "Sí" / "No"
+- Envío inmediato al dar click
+- Mensaje de resultado (confirmado / rechazado)
+- Botón "Volver a contestar" para actualizar la respuesta
 
 ### 3. Server Action (rsvp.ts)
 
 ```typescript
-export async function submitRSVP(formData: {
-  customId: string;
-  token: string;
-  decision: 'confirmed' | 'declined';
-  passesConfirmed: number;
-})
+export async function submitRSVP(
+  customId: string,
+  token: string,
+  decision: 'confirmed' | 'declined',
+  passesConfirmed: number
+)
 ```
 
-### 4. Reproductor de Audio
+### 4. Panel Administrativo (`/admin`)
+
+- URL protegida por token en query string: `/admin?token=TU_ADMIN_TOKEN`
+- Métricas rápidas: total invitados, confirmados, rechazados, pendientes, pases
+- Tabla de invitados con estado, pases y fecha de última respuesta
+- Filtro por estado + búsqueda por nombre o `customId`
+- Exportación de los resultados filtrados a CSV
+
+### 5. Reproductor de Audio
 
 - Ubicación: bottom-left fija
 - Controles: Play/Pause con ícono de música rotante
