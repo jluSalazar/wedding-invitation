@@ -101,7 +101,7 @@ export default function Hero({ displayName, passesAllowed }: GuestCardProps) {
                 </div>
 
                 {/* Guest card (La tarjeta principal, con z-10 para flotar sobre las flores) */}
-                <div className="relative bg-white rounded-xl shadow-xl z-10 px-4 py-3 overflow-visible min-w-[40%] w-full">
+                <div className="relative bg-white rounded-xl shadow-xl z-10 px-4 py-10 overflow-visible min-w-[40%] w-full">
 
                     <p
                         className="text-center text-[#7a8fa3] text-base italic mb-1"
