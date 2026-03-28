@@ -11,13 +11,23 @@ export interface AdminGuest {
   updatedAt: string;
 }
 
+interface AdminGuestRecord {
+  _id: unknown;
+  displayName: string;
+  customId: string;
+  status: GuestStatus;
+  passesAllowed: number;
+  passesConfirmed: number;
+  updatedAt: Date | string;
+}
+
 export async function getAllGuestsForAdmin(): Promise<AdminGuest[]> {
   await connectToDatabase();
 
   const guests = await Guest.find()
     .sort({ updatedAt: -1 })
     .select('displayName customId status passesAllowed passesConfirmed updatedAt')
-    .lean();
+    .lean<AdminGuestRecord[]>();
 
   return guests.map((guest) => ({
     id: String(guest._id),

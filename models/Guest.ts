@@ -9,6 +9,8 @@ export interface IGuest extends Document {
   passesAllowed: number;
   passesConfirmed: number;
   status: GuestStatus;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const GuestSchema = new Schema<IGuest>(
