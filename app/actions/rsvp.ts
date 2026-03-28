@@ -23,14 +23,6 @@ export async function submitRSVP(
       return { success: false, error: 'Invitación no válida o token incorrecto.' };
     }
 
-    // Prevent double submissions
-    if (guest.status !== 'pending') {
-      return {
-        success: false,
-        error: 'Tu respuesta ya fue registrada anteriormente.',
-      };
-    }
-
     // Validate passes
     if (decision === 'confirmed') {
       if (passesConfirmed < 1 || passesConfirmed > guest.passesAllowed) {
@@ -49,8 +41,8 @@ export async function submitRSVP(
       success: true,
       message:
         decision === 'confirmed'
-          ? `¡Confirmado! Te esperamos con ${passesConfirmed} pase${passesConfirmed > 1 ? 's' : ''}.`
-          : 'Recibimos tu respuesta. Lamentamos que no puedas acompañarnos.',
+          ? `Tu confirmación fue registrada. Te esperamos con ${passesConfirmed} pase${passesConfirmed > 1 ? 's' : ''}.`
+          : 'Tu respuesta fue registrada correctamente. Lamentamos que no puedas acompañarnos.',
     };
   } catch (err) {
     console.error('[submitRSVP] Error:', err);
